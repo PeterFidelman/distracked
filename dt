@@ -24,7 +24,6 @@ docstr() {
 }
 
 do_subcmd() {
-    n_arguments="$#"
     subcmd="$1"
     shift
 
