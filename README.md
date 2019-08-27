@@ -25,6 +25,7 @@ $ ./dt ls
 * main
 
 $ ./dt cat
+*
 
 --------------------------------------------------------------------------------
             As you come up with things to do, add them to the stack.
