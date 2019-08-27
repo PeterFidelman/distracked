@@ -42,7 +42,7 @@ do_subcmd() {
     "ls"    ) docstr "list all stacks";
               stack_list ;;
     "pop"   ) docstr "remove top of current stack";
-              sed -i '$d' "$(current_stack)" ;;
+              sed -i.bak '$d' "$(current_stack)"; rm *.bak ;;
     "push"  ) docstr "add item at top of current stack";
               echo "$*" >> "$(current_stack)" ;;
     "rm"    ) docstr "delete given stack";
