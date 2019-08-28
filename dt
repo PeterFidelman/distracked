@@ -19,6 +19,10 @@ stack_list() {
     ls -t |cat
 }
 
+stack_head() {
+    tail -n 1 "$*"
+}
+
 docstr() {
     true
 }
@@ -34,22 +38,24 @@ do_subcmd() {
     "cat"   ) docstr "display entire contents of current stack";
               echo -n '* ' ; tac "$(current_stack)" ;;
     "edit"  ) docstr "open all stacks in text editor for bulk modification";
-              editor * ;;
-    "head"  ) docstr "display top of current stack";
-              echo -n '* ' ; tail -n 1 "$(current_stack)" ;;
+              editor $(ls -t) ;;
+    "head"  ) docstr "display top of stack";
+              echo -n '* ' ; stack_head "$(current_stack)" ;;
     "help"  ) docstr "display this message";
               return 1 ;;
     "ls"    ) docstr "list all stacks";
               stack_list ;;
-    "pop"   ) docstr "remove top of current stack";
+    "pop"   ) docstr "remove top of stack";
+              stack_head "$(current_stack)" > .yank
               sed -i.bak '$d' "$(current_stack)"; rm *.bak ;;
-    "push"  ) docstr "add item at top of current stack";
-              echo "$*" >> "$(current_stack)" ;;
+    "push"  ) docstr "add given (default: last popped) item at top of stack";
+              item=${*:-$(cat .yank)}
+              echo "$item" >> "$(current_stack)" ;;
     "rm"    ) docstr "delete given stack";
               rm "$*" ;;
     "switch") docstr "switch to given stack, creating it if necessary";
               touch "$1" ; stack_list ;;
-    ""      ) echo -n '* ' ; tail -n 1 "$(current_stack)" ;;
+    ""      ) echo -n '* ' ; stack_head "$(current_stack)" ;;
     *)
         # Unrecognized subcmd
         return 1
