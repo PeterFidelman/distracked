@@ -36,11 +36,13 @@ do_subcmd() {
     "all"   ) docstr "display entire contents of all stacks";
               for f in $(ls -t); do echo -ne "\n-- $f --\n* "; tac "$f"; done;;
     "cat"   ) docstr "display entire contents of current stack";
-              echo -n '* ' ; tac "$(current_stack)" ;;
+              echo -ne "-- $(current_stack) --\n* " ; tac "$(current_stack)" ;;
     "edit"  ) docstr "open all stacks in text editor for bulk modification";
               editor $(ls -t) ;;
     "head"  ) docstr "display top of stack";
               echo -n '* ' ; stack_head "$(current_stack)" ;;
+    "heads"  ) docstr "display tops of all stacks";
+              for f in $(ls -t); do echo -ne "\n-- $f --\n* "; stack_head "$f"; done;;
     "help"  ) docstr "display this message";
               return 1 ;;
     "ls"    ) docstr "list all stacks";
